@@ -33,7 +33,7 @@ foreach ( (array)$cats as $cat ) : //main foreach
     $xmlBody .= '<category type="category" title="'.$catname.'">';
 
     $bookmarks = get_bookmarks(array("category" => $cat->term_id, "orderby"  => 'rating'));
-    foreach ( (array)$bookmarks as $bookmark ) :
+    foreach ( (array)$bookmarks as $bookmark ) : //looping the $bookmarks
         $title = apply_filters( 'link_title', $bookmark->link_name );
         $xmlBody .= '<item text="'.esc_attr($title).'" type="link" htmlUrl="'.esc_attr($bookmark->link_url).'" linkDesc="'.esc_attr($bookmark->link_description).'"/>';
     endforeach;//END $bookmarks
