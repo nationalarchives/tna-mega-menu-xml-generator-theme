@@ -14,68 +14,45 @@ if ( !empty($_GET['link_cat']) ) {
 
 echo '<?xml version="1.0"?'.">\n";
 ?>
+<?php
+$xmlBody = '<opml version="1.0">';
+$xmlBody .= '<head>';
+$xmlBody .= '<title>'.get_the_title().'</title>';
+$xmlBody .= '<dateCreated>'.gmdate("D, d M Y H:i:s").'</dateCreated>';
+$xmlBody .= '</head>';
+$xmlBody .= '<body>';
 
-<opml version="1.0">
-    <head>
-        <title><?php printf( __('Links for %s'), esc_attr(get_bloginfo('name', 'display')) ); ?></title>
-        <dateCreated><?php echo gmdate("D, d M Y H:i:s"); ?> GMT</dateCreated>
-        <?php
-        /**
-         * Fires in the OPML header.
-         *
-         * @since 3.0.0
-         */
-        do_action( 'opml_head' );
-        ?>
-    </head>
-    <body>
-    <?php
-    if ( empty($link_cat) )
-        $cats = get_categories(array('taxonomy' => 'link_category', 'hierarchical' => 0));
-    else
-        $cats = get_categories(array('taxonomy' => 'link_category', 'hierarchical' => 0, 'include' => $link_cat));
 
-    foreach ( (array)$cats as $cat ) :
-        /**
-         * Filter the OPML outline link category name.
-         *
-         * @since 2.2.0
-         *
-         * @param string $catname The OPML outline category name.
-         */
-        $catname = apply_filters( 'link_category', $cat->name );
+if ( empty($link_cat) )
+    $cats = get_categories(array('taxonomy' => 'link_category', 'hierarchical' => 0));
+else
+    $cats = get_categories(array('taxonomy' => 'link_category', 'hierarchical' => 0, 'include' => $link_cat));
 
-        ?>
-        <category type="category" title="<?php echo esc_attr($catname); ?>">
-            <?php
-            $bookmarks = get_bookmarks(array
-            ("category" => $cat->term_id,
-             "orderby"  => 'rating'
-             )
-            );
-            foreach ( (array)$bookmarks as $bookmark ) :
-                /**
-                 * Filter the OPML outline link title text.
-                 *
-                 * @since 2.2.0
-                 *
-                 * @param string $title The OPML outline title text.
-                 */
-                $title = apply_filters( 'link_title', $bookmark->link_name );
-                ?>
-                <item text="<?php echo esc_attr($title); ?>" type="link" xmlUrl="<?php echo esc_attr($bookmark->link_rss); ?>" htmlUrl="<?php echo esc_attr($bookmark->link_url); ?>" updated="<?php if ('0000-00-00 00:00:00' != $bookmark->link_updated) echo $bookmark->link_updated; ?>" linkDesc="<?php echo esc_attr($bookmark->link_description); ?>"/>
-                <?php
-            endforeach; // $bookmarks
-            ?>
-        </category>
-        <?php
-    endforeach; // $cats
-    ?>
-    </body>
-</opml>
+foreach ( (array)$cats as $cat ) : //main foreach
+    $catname = apply_filters( 'link_category', $cat->name );
+    $xmlBody .= '<category type="category" title="'.$catname.'">';
+
+    $bookmarks = get_bookmarks(array("category" => $cat->term_id, "orderby"  => 'rating'));
+    foreach ( (array)$bookmarks as $bookmark ) :
+        $title = apply_filters( 'link_title', $bookmark->link_name );
+        $xmlBody .= '<item text="'.esc_attr($title).'" type="link" htmlUrl="'.esc_attr($bookmark->link_url).'" linkDesc="'.esc_attr($bookmark->link_description).'"/>';
+    endforeach;//END $bookmarks
+    $xmlBody .= '</category>';
+endforeach;//END main foreach
+?>
+
+<?php
+$xmlBody .= '</body>';
+$xmlBody .= '</opml>';
+
+echo $xmlBody;
+
+?>
 
 <?php
 //Outputs the .xml file
-$xmlfile = new SimpleXMLElement($homepage);
-$xmlfile->asXML('file.xml');
+$xmlfile = new SimpleXMLElement($xmlBody);
+$xmlfile->preserveWhiteSpace = true;
+$xmlfile->formatOutput = true; //setting the formatOutput attribute of domDocument to true
+$xmlfile->asXML('file_new.xml');
 ?>
