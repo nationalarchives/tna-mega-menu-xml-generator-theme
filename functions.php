@@ -72,3 +72,6 @@ function xml_test_setup() {
 }
 endif;
 add_action( 'after_setup_theme', 'xml_test_setup' );
+
+//Adding the Link Manager
+add_filter( 'pre_option_link_manager_enabled', '__return_true' );
