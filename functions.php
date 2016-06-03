@@ -22,7 +22,6 @@ function xml_test_setup() {
 	 * If you're building a theme based on xml-test, use a find and replace
 	 * to change 'xml-test' to the name of your theme in all the template files.
 	 */
-	load_theme_textdomain( 'xml-test', get_template_directory() . '/languages' );
 
 	// Add default posts and comments RSS feed links to head.
 	add_theme_support( 'automatic-feed-links' );
@@ -73,11 +72,3 @@ function xml_test_setup() {
 }
 endif;
 add_action( 'after_setup_theme', 'xml_test_setup' );
-
-/**
- * Set the content width in pixels, based on the theme's design and stylesheet.
- *
- * Priority 0 to make it available to lower priority callbacks.
- *
- * @global int $content_width
- */

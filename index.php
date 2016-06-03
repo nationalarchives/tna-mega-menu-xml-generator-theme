@@ -1,56 +1,55 @@
 <?php
-/**
- * The main template file.
- *
- * This is the most generic template file in a WordPress theme
- * and one of the two required files for a theme (the other being style.css).
- * It is used to display a page when nothing more specific matches a query.
- * E.g., it puts together the home page when no home.php file exists.
- *
- * @link https://codex.wordpress.org/Template_Hierarchy
- *
- * @package xml-test
- */
 
-get_header(); ?>
+header('Content-Type: text/xml; charset=' . get_option('blog_charset'), true);
 
-	<div id="primary" class="content-area">
-		<main id="main" class="site-main" role="main">
+$link_cat = '';
+if ( !empty($_GET['link_cat']) ) {
+	$link_cat = $_GET['link_cat'];
+	if ( !in_array($link_cat, array('all', '0')) )
+		$link_cat = absint( (string)urldecode($link_cat) );
+}
 
-		<?php
-		if ( have_posts() ) :
+echo '<?xml version="1.0"?'.">\n";
+?>
+<?php
+$xmlBody = '<opml version="1.0">';
+$xmlBody .= '<head>';
+$xmlBody .= '<title>'.get_the_title().'</title>';
+$xmlBody .= '<dateCreated>'.gmdate("D, d M Y H:i:s").'</dateCreated>';
+$xmlBody .= '</head>';
+$xmlBody .= '<body>';
 
-			if ( is_home() && ! is_front_page() ) : ?>
-				<header>
-					<h1 class="page-title screen-reader-text"><?php single_post_title(); ?></h1>
-				</header>
 
-			<?php
-			endif;
+if ( empty($link_cat) )
+	$cats = get_categories(array('taxonomy' => 'link_category', 'hierarchical' => 0));
+else
+	$cats = get_categories(array('taxonomy' => 'link_category', 'hierarchical' => 0, 'include' => $link_cat));
 
-			/* Start the Loop */
-			while ( have_posts() ) : the_post();
+foreach ( (array)$cats as $cat ) : //main foreach
+	$catname = apply_filters( 'link_category', $cat->name );
+	$xmlBody .= '<category type="category" title="'.$catname.'">';
 
-				/*
-				 * Include the Post-Format-specific template for the content.
-				 * If you want to override this in a child theme, then include a file
-				 * called content-___.php (where ___ is the Post Format name) and that will be used instead.
-				 */
-				get_template_part( 'template-parts/content', get_post_format() );
-
-			endwhile;
-
-			the_posts_navigation();
-
-		else :
-
-			get_template_part( 'template-parts/content', 'none' );
-
-		endif; ?>
-
-		</main><!-- #main -->
-	</div><!-- #primary -->
+	$bookmarks = get_bookmarks(array("category" => $cat->term_id, "orderby"  => 'rating'));
+	foreach ( (array)$bookmarks as $bookmark ) : //looping the $bookmarks
+		$title = apply_filters( 'link_title', $bookmark->link_name );
+		$xmlBody .= '<item text="'.esc_attr($title).'" type="link" htmlUrl="'.esc_attr($bookmark->link_url).'" linkDesc="'.esc_attr($bookmark->link_description).'"/>';
+	endforeach;//END $bookmarks
+	$xmlBody .= '</category>';
+endforeach;//END main foreach
+?>
 
 <?php
-get_sidebar();
-get_footer();
+$xmlBody .= '</body>';
+$xmlBody .= '</opml>';
+
+echo $xmlBody;
+
+?>
+
+<?php
+//Outputs the .xml file
+$xmlfile = new SimpleXMLElement($xmlBody);
+$xmlfile->preserveWhiteSpace = true;
+$xmlfile->formatOutput = true; //setting the formatOutput attribute of domDocument to true
+$xmlfile->asXML('file_new.xml');
+?>
