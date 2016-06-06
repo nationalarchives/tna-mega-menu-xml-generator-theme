@@ -49,7 +49,5 @@ echo $xmlBody;
 <?php
 //Outputs the .xml file
 $xmlfile = new SimpleXMLElement($xmlBody);
-$xmlfile->preserveWhiteSpace = true;
-$xmlfile->formatOutput = true; //setting the formatOutput attribute of domDocument to true
-$xmlfile->asXML('file_new.xml');
+$xmlfile->asXML('mega_menu_data.xml');
 ?>
