@@ -27,7 +27,8 @@ else
 
 foreach ( (array)$cats as $cat ) : //main foreach
 	$catname = apply_filters( 'link_category', $cat->name );
-	$xmlBody .= '<category type="category" title="'.$catname.'">';
+	$caturl = apply_filters( 'link_category', $cat->slug );
+	$xmlBody .= '<category type="category" title="'.$catname.'" catUrl="'.$caturl.'">';
 
 	$bookmarks = get_bookmarks(array("category" => $cat->term_id, "orderby"  => 'rating'));
 	foreach ( (array)$bookmarks as $bookmark ) : //looping the $bookmarks
