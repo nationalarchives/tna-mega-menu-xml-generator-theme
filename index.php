@@ -27,7 +27,8 @@ else
 
 foreach ( (array)$cats as $cat ) : //main foreach
 	$catname = apply_filters( 'link_category', $cat->name );
-	$xmlBody .= '<category type="category" title="'.$catname.'">';
+	$caturl = apply_filters( 'link_category', $cat->slug );
+	$xmlBody .= '<category type="category" title="'.$catname.'" catUrl="'.$caturl.'">';
 
 	$bookmarks = get_bookmarks(array("category" => $cat->term_id, "orderby"  => 'rating'));
 	foreach ( (array)$bookmarks as $bookmark ) : //looping the $bookmarks
@@ -49,7 +50,5 @@ echo $xmlBody;
 <?php
 //Outputs the .xml file
 $xmlfile = new SimpleXMLElement($xmlBody);
-$xmlfile->preserveWhiteSpace = true;
-$xmlfile->formatOutput = true; //setting the formatOutput attribute of domDocument to true
-$xmlfile->asXML('file_new.xml');
+$xmlfile->asXML('mega_menu_data.xml');
 ?>
