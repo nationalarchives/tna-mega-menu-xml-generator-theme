@@ -2,7 +2,7 @@
 TNA mega-menu xml generator theme
 =================================
 
-This is an ultra-minimal theme with the only sole purpose is to create a xml file for the mega-menu navigation.
+This is an ultra-minimal theme with the only sole purpose is to create a xml file for the mega-menu navigation.....
 
 Getting Started
 ---------------
