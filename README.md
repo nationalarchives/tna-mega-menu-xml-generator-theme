@@ -1,4 +1,3 @@
-
 TNA mega-menu xml generator theme
 =================================
 
@@ -8,7 +7,7 @@ Getting Started
 ---------------
 
 1. Install the theme to your multisite as a child site, or to a standalone wordpress install.
-2. Create your links categories
+2. Create your links categories as per [TNA](http://www.nationalarchives.gov.uk/) web site.
     * About Us
     * Education
     * Help with your research
