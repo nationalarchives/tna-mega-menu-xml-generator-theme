@@ -36,4 +36,4 @@ Generating the XML
 
 Run the home-page, and in the root folder you will notice a file being created, `mega_menu_data.xml`.
 
-__Note:__ If you wold like to make changes to the mage menu, you will need to run the home page each time for a new xml to be generated.
+__Note:__ If you would like to make changes to the mage menu, you will need to run the home page each time for a new xml to be generated.
