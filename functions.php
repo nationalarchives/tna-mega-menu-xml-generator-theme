@@ -99,3 +99,10 @@ function remove_menus(){
 
 }
 add_action( 'admin_menu', 'remove_menus' );
+
+
+function edit_admin_menus() {
+	global $menu;
+	$menu[15][0] = 'Mega Menu'; // Change Links to Mega Menu
+}
+add_action( 'admin_menu', 'edit_admin_menus' );
