@@ -48,7 +48,9 @@ echo $xmlBody;
 ?>
 
 <?php
-//Outputs the .xml file
+
+delete_site_transient( 'cache_xml' );
+
 $xmlfile = new SimpleXMLElement($xmlBody);
 $xmlfile->asXML('mega_menu_data.xml');
 ?>
