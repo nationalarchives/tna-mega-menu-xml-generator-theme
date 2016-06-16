@@ -15,7 +15,8 @@ Getting Started
     * `Information management`
     * `Archives sector`
     * `More...`
-3. Create the links and assign them to the categories you have created above.
+3. Create the links and assign them to the categories you have created above
+    * In the advance panel, change the rating to a number which will then give you the order of the link you want.
 
 
 Promotional banner
