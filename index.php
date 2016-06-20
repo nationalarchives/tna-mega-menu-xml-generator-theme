@@ -30,8 +30,8 @@ foreach ( (array)$cats as $cat ) : //Loops the Links Categories
 	$caturl = apply_filters( 'link_category', $cat->slug );
 	$xmlBody .= '<category type="category" title="'.$catname.'" catUrl="'.$caturl.'">';
 
-	$bookmarks = get_bookmarks(array("category" => $cat->term_id, "orderby"  => 'rating'));
-	foreach ( (array)$bookmarks as $bookmark ) : //Loops links of each category. Orders
+	$bookmarks = get_bookmarks(array("category" => $cat->term_id, "orderby"  => 'rating')); // Setting the parameters, The ID of the category and Ordering
+	foreach ( (array)$bookmarks as $bookmark ) : //Loops links of each category
 		$title = apply_filters( 'link_title', $bookmark->link_name );
 		$xmlBody .= '<item text="'.esc_attr($title).'" type="link" htmlUrl="'.esc_attr($bookmark->link_url).'" linkDesc="'.esc_attr($bookmark->link_description).'"/>';
 	endforeach;//END loop links
